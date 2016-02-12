@@ -5,6 +5,8 @@ var baseN = require('base-n');
 var charset = process.argv[2];
 var strlength = process.argv[3];
 var salt = process.argv[4];
+var author = process.argv[5];
+var baseurl = process.argv[6];
 var nbCores = require('os').cpus().length;
 
 console.log("Parameters")
@@ -39,9 +41,8 @@ function main(charset, strlength, salt)
     };
 
     // Request
-    var propertiesObject = { author:'MartinLeGuillou' };
-    var url = 'http://localhost:3000/GetHash'
-    request({url:url, qs:propertiesObject}, function(err, response, body) {
+    var propertiesObject = { author: author };
+    request({url: baseurl + '/GetHash', qs:propertiesObject}, function(err, response, body) {
         if(err) { console.log(err); return; }
         var hash = JSON.parse(body).hash;
 	
@@ -63,7 +64,8 @@ function main(charset, strlength, salt)
         		    console.log('found');
         		    console.log(m.string);
         		    console.timeEnd('score');
-                    return main(charset, strlength, salt);
+
+                    return sendResult(m.string);
                 } else if (m.status === 'end') {
                     endedWorkers++;
                     if (endedWorkers == nbCores-1) {
@@ -85,4 +87,24 @@ function killAllWorkers(workers)
     };
 }
 
+function sendResult(result)
+{
+    var options = {
+      uri: baseurl + '/PostSuccess',
+      method: 'POST',
+      json: {
+        "author": author,
+        "result": result
+      }
+    };
 
+    request(options, function(err, response, body) {
+        if (!error && response.statusCode == 200) {
+            return main(charset, strlength, salt);
+        } else {
+            setTimeout(function() {
+                return sendResult(result);
+            }, 100);
+        }
+    });
+}
