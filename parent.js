@@ -106,14 +106,7 @@ function killAllWorkers(workers)
 
 function sendResult(result)
 {
-    var options = {
-      uri: baseurl + '/PostResult',
-      method: 'POST',
-      json: {
-        "author": author,
-        "result": result
-      }
-    };
+    var options = { url: baseurl + `/PostResult?author=${author}&result=${result}` };
 
     request(options, function(err, response, body) {
         if (!err && response.statusCode == 200) {
