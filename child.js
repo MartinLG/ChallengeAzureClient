@@ -16,7 +16,9 @@ var b36 = baseN.create({
 do {
 	var value = b36.decode(string);
 	value++;
-	string = b36.encode(value);
+	if (value.length <= stringlength ) {
+        string = b36.encode(value);
+    }
 } while (sha1(string + salt) != hash || string != end);
 
 if (string == end) {
