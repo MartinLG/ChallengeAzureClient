@@ -21,4 +21,4 @@ for (var i = 0; i < range; i++) {
 	string = b36.encode(b36.decode(string) + i);
 	var hash = sha1(string + salt);
 	redis.set(hash, string);
-};
+}

@@ -31,9 +31,6 @@ main(charset, strlength, salt);
 function main()
 {
 	console.log("Init i : ");
-	console.log(nbCores - usedCores);
-	console.log(nbCores);
-	console.log(usedCores);
 	for (usedCores; usedCores < nbCores; usedCores++) {
 		console.log(currentWorker);
 		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
