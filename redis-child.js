@@ -23,4 +23,4 @@ for (var i = 0; i < range; i++) {
 	redis.set(hash, string);
 }
 
-process.kill();
+process.send({status: 'end'});

@@ -35,12 +35,15 @@ function main()
 		console.log(currentWorker);
 		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
 		currentWorker++;
-		worker.on('close', function() {
-			console.log('finished')
-			if (currentWorker < limits.length) {
-				usedCores--;
-				main();
-			};
+		worker.on('message', function(m) {
+			if (m.status === "end") {
+				worker.kill('SIGINT');
+				console.log('finished')
+				if (currentWorker < limits.length) {
+					usedCores--;
+					main();
+				};
+			}
         });
 	};
 }
