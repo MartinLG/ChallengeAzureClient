@@ -103,6 +103,7 @@ function sendResult(result)
             console.log('result sent');
             return main(charset, strlength, salt);
         } else {
+            console.log(err)
             console.log('result error');
             setTimeout(function() {
                 return sendResult(result);
