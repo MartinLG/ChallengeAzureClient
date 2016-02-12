@@ -22,5 +22,3 @@ for (var i = 0; i < range; i++) {
 	var hash = sha1(string + salt);
 	redis.set(hash, string);
 };
-
-process.kill();
