@@ -15,10 +15,17 @@ var b36 = baseN.create({
     length: strlength
 });
 
-do {
+setNext();
+
+function setNext() {
 	var value = b36.decode(string);
 	value++;
 	string = b36.encode(value);
 	var hash = sha1(string + salt);
 	redis.set(hash, string);
-} while (string != end);
+	if (string != end) {
+		return setNext();
+	} else {
+		console.log('finished');
+	}
+}
