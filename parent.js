@@ -90,7 +90,7 @@ function killAllWorkers(workers)
 function sendResult(result)
 {
     var options = {
-      uri: baseurl + '/PostSuccess',
+      uri: baseurl + '/PostResult',
       method: 'POST',
       json: {
         "author": author,
@@ -104,6 +104,7 @@ function sendResult(result)
             return main(charset, strlength, salt);
         } else {
             console.log(err)
+            console.log(response.statusCode)
             console.log('result error');
             setTimeout(function() {
                 return sendResult(result);
