@@ -100,8 +100,10 @@ function sendResult(result)
 
     request(options, function(err, response, body) {
         if (!error && response.statusCode == 200) {
+            console.log('result sent');
             return main(charset, strlength, salt);
         } else {
+            console.log('result error');
             setTimeout(function() {
                 return sendResult(result);
             }, 100);
