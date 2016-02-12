@@ -99,7 +99,7 @@ function sendResult(result)
     };
 
     request(options, function(err, response, body) {
-        if (!error && response.statusCode == 200) {
+        if (!err && response.statusCode == 200) {
             console.log('result sent');
             return main(charset, strlength, salt);
         } else {
