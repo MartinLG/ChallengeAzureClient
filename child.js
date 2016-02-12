@@ -17,7 +17,7 @@ do {
 	var value = b36.decode(string);
 	value++;
 	string = b36.encode(value);
-} while (sha1(string + salt) != hash || string != end);
+} while (sha1(string + salt) != hash && string != end);
 
 if (string == end) {
 	process.send({status: 'end'});
