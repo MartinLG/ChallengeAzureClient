@@ -5,7 +5,7 @@ var charset = process.argv[2];
 var strlength = process.argv[3];
 var salt = process.argv[4];
 
-var nbCores = require('os').cpus().length;
+var nbCores = require('os').cpus().length / 2;
 
 var b36 = baseN.create({
     characters: charset
