@@ -12,6 +12,9 @@ var b36 = baseN.create({
 });
 
 var max = b36.decode(charset[charset.length - 1].repeat(strlength));
+
+console.log(max);
+
 var each = max / nbCores;
 var limits = [];
 
@@ -30,9 +33,9 @@ main(charset, strlength, salt);
 
 function main()
 {
-	console.log("Init i : ");
 	for (usedCores; usedCores < nbCores; usedCores++) {
 		console.log(currentWorker);
+		console.log(limits[currentWorker].end);
 		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
 		currentWorker++;
 		worker.on('message', function(m) {
