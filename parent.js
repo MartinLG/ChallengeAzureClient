@@ -1,12 +1,16 @@
 var childProcess = require('child_process')
 var request = require('request')
 var baseN = require('base-n');
+var Timer = require('timer.js')
+
+var timer = new Timer();
 
 var charset = process.argv[2];
 var strlength = process.argv[3];
 var salt = process.argv[4];
 var author = process.argv[5];
 var baseurl = process.argv[6];
+var maxTime = parseInt(process.argv[7]);
 var nbCores = require('os').cpus().length;
 
 console.log("Parameters")
@@ -16,37 +20,42 @@ console.log(salt)
 
 console.log("Start")
 
+var b36 = baseN.create({
+    characters: charset
+});
+
+var max = b36.decode(charset[charset.length - 1].repeat(strlength));
+var each = max / nbCores;
+var limits = [];
+
+for (var i = 0; i < nbCores; i++) {
+    var start = Math.ceil(i * each);
+    if (i != nbCores - 1) {
+        var end = start + Math.ceil(each);
+    } else {
+        var end = max;
+    }
+
+    limits.push({start: b36.encode(start), end: b36.encode(end)});
+};
+
 main(charset, strlength, salt);
 
 function main(charset, strlength, salt)
 {
-    var b36 = baseN.create({
-        characters: charset
-    });
-
-    var max = b36.decode(charset[charset.length - 1].repeat(strlength));
-    var each = max / nbCores;
-    var limits = [];
     var workers = [];
-
-    for (var i = 0; i < nbCores; i++) {
-        var start = Math.ceil(i * each);
-        if (i != nbCores - 1) {
-            var end = start + Math.ceil(each);
-        } else {
-            var end = max;
-        }
-
-        limits.push({start: b36.encode(start), end: b36.encode(end)});
-    };
-
     // Request
     var propertiesObject = { author: author };
     request({url: baseurl + '/GetHash', qs:propertiesObject}, function(err, response, body) {
         if(err) { console.log(err); return; }
         var hash = JSON.parse(body).hash;
 	
-	console.time('score');
+	    console.time('score');
+        timer.start(maxTime).on('end', function () {
+            console.log('dropped');
+            killAllWorkers(workers);
+            return main(charset, strlength, salt);
+        });
 
         if (!hash) {
             return main(charset, strlength, salt);
