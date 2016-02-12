@@ -36,9 +36,10 @@ function main()
 		console.log(i);
 		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
 		currentWorker++;
+		usedCores++;
 		worker.on('close', function() {
 			console.log('finished')
-			currentWorker--;
+			usedCores--;
 			main();
         });
 	};
