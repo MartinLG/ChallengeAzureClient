@@ -29,7 +29,7 @@ for (var i = 0; i < max; i=i+20000) {
 	limits.push({start: b36.encode(i), end: b36.encode(j)})
 };
 
-console.log(limits);
+console.log(limits.length);
 
 main(charset, strlength, salt);
 
