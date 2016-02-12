@@ -20,7 +20,7 @@ var range = b36.decode(end) - b36.decode(string);
 for (var i = 0; i < range; i++) {
 	string = b36.encode(b36.decode(string) + i);
 	var hash = sha1(string + salt);
-	redis.set(hash, string);
+	setTimeout(redis.set(hash, string), 5);
 }
 
 process.send({status: 'end'});
