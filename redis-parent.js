@@ -5,13 +5,16 @@ var charset = process.argv[2];
 var strlength = process.argv[3];
 var salt = process.argv[4];
 
-var nbCores = require('os').cpus().length;
+var nbCores = require('os').cpus().length / 2;
 
 var b36 = baseN.create({
     characters: charset
 });
 
 var max = b36.decode(charset[charset.length - 1].repeat(strlength));
+
+console.log(max);
+
 var each = max / nbCores;
 var limits = [];
 
@@ -26,16 +29,25 @@ for (var i = 0; i < max; i=i+20000) {
 	limits.push({start: b36.encode(i), end: b36.encode(j)})
 };
 
+console.log(limits.length);
+
 main(charset, strlength, salt);
 
 function main()
 {
-	for (var i = 0; i < nbCores - usedCores; i++) {
+	for (usedCores; usedCores < nbCores; usedCores++) {
+		// console.log(currentWorker);
+		// console.log(limits[currentWorker].end);
 		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
 		currentWorker++;
-		worker.on('end', function() {
-			currentWorker--;
-			main();
+		worker.on('message', function(m) {
+			if (m.status === "end") {
+				worker.kill('SIGINT');
+				if (currentWorker < limits.length) {
+					usedCores--;
+					main();
+				};
+			}
         });
 	};
 }
