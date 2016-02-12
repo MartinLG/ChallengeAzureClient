@@ -32,15 +32,16 @@ function main()
 {
 	console.log("Init i : ");
 	console.log(nbCores - usedCores);
-	for (var i = 0; i < nbCores - usedCores; i++) {
+	for (var usedCores; usedCores < nbCores; usedCores++) {
 		console.log(i);
 		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
 		currentWorker++;
-		usedCores++;
 		worker.on('close', function() {
 			console.log('finished')
-			usedCores--;
-			main();
+			if (currentWorker < limits.length) {
+				usedCores--;
+				main();
+			};
         });
 	};
 }
