@@ -1,7 +1,8 @@
-var childProcess = require('child_process')
-var request = require('request')
+var childProcess = require('child_process');
+var request = require('request');
 var baseN = require('base-n');
-var Timer = require('timer.js')
+var Timer = require('timer.js');
+var _redis = require("redis");
 
 var timer = new Timer();
 
@@ -18,6 +19,8 @@ console.log(charset)
 console.log(strlength)
 console.log(salt)
 console.log("Start")
+
+var client = _redis.createClient(6379, '167.114.227.190')
 
 var b36 = baseN.create({
     characters: charset
@@ -48,16 +51,24 @@ function main(charset, strlength, salt)
     request({url: baseurl + '/GetHash', qs:propertiesObject}, function(err, response, body) {
         if(err) { console.log(err); return; }
         var hash = JSON.parse(body).hash;
-	    console.time('score');
+
+        if (!hash) {
+            return main(charset, strlength, salt);
+        };
+
+        console.time('score');
         timer.start(maxTime).on('end', function () {
             console.log('dropped');
             killAllWorkers(workers);
             return main(charset, strlength, salt);
         });
 
-        if (!hash) {
-            return main(charset, strlength, salt);
-        };
+        client.get(hash, function(err, reply) {
+            if (err) {console.log(err)}
+            if (reply) {
+                sendResult(reply)
+            }
+        })
 
         console.log(JSON.parse(body).random);
 
