@@ -10,7 +10,7 @@ var charset = process.argv[2];
 var strlength = process.argv[3];
 var salt = process.argv[4];
 var author = process.argv[5];
-var baseurl = process.argv[6];
+var baseurl = 'http://localhost:8080' //process.argv[6];
 var maxTime = parseInt(process.argv[7]);
 var nbCores = require('os').cpus().length;
 
@@ -67,11 +67,9 @@ function main(charset, strlength, salt)
         client.get(hash, function(err, reply) {
             if (err) {console.log(err)}
             if (reply) {
-                sendResult(reply)
+                return sendResult(reply)
             }
         })
-
-        console.log(JSON.parse(body).random);
 
         var endedWorkers = 0;
         for (var i=0 ; i<nbCores; i++) {
