@@ -86,7 +86,7 @@ function main(charset, strlength, salt)
                     return sendResult(m.string);
                 } else if (m.status === 'end') {
                     endedWorkers++;
-                    if (endedWorkers == nbCores-1) {
+                    if (endedWorkers == nbCores) {
                         killAllWorkers(workers);
                         console.log('Not Found, Mother fucker.');
                         return main(charset, strlength, salt);

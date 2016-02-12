@@ -15,22 +15,27 @@ var max = b36.decode(charset[charset.length - 1].repeat(strlength));
 var each = max / nbCores;
 var limits = [];
 
-for (var i = 0; i < nbCores; i++) {
-    var start = Math.ceil(i * each);
-    if (i != nbCores - 1) {
-        var end = start + Math.ceil(each);
-    } else {
-        var end = max;
-    }
+var usedCores = 0;
+var currentWorker = 0;
 
-    limits.push({start: b36.encode(start), end: b36.encode(end)});
+for (var i = 0; i < max; i=i+20000) {
+	var j = i + 20000;
+	if (j > max) {
+		j = max;
+	};
+	limits.push({start: b36.encode(i), end: b36.encode(j)})
 };
 
 main(charset, strlength, salt);
 
-function main(charset, strlength, salt)
+function main()
 {
-	for (var i=0 ; i<nbCores; i++) {
-        var worker = childProcess.fork('redis-child.js', [limits[i].start, limits[i].end, charset, strlength, salt]);
-    }
+	for (var i = 0; i < nbCores - usedCores; i++) {
+		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
+		currentWorker++;
+		worker.on('end', function() {
+			currentWorker--;
+			main();
+        });
+	};
 }
