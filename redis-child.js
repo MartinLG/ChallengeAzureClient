@@ -17,6 +17,9 @@ var b36 = baseN.create({
 
 var range = b36.decode(end) - b36.decode(string);
 
+console.log('range =>')
+console.log(range);
+
 for (var i = 0; i < range; i++) {
 	string = b36.encode(b36.decode(string) + i);
 	var hash = sha1(string + salt);
