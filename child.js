@@ -19,7 +19,7 @@ do {
 	if (value.length <= stringlength ) {
         string = b36.encode(value);
     }
-} while (sha1(string + salt) != hash || string != end);
+} while (sha1(string + salt) != hash && string != end);
 
 if (string == end) {
 	process.send({status: 'end'});

@@ -53,6 +53,7 @@ function main(charset, strlength, salt)
         var hash = JSON.parse(body).hash;
 
         if (!hash) {
+            console.log('Pas de hash')
             return main(charset, strlength, salt);
         };
 
