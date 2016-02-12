@@ -10,7 +10,7 @@ var charset = process.argv[2];
 var strlength = process.argv[3];
 var salt = process.argv[4];
 var author = process.argv[5];
-var baseurl = 'http://localhost:8080' //process.argv[6];
+var baseurl =  process.argv[6];
 var maxTime = parseInt(process.argv[7]);
 var nbCores = require('os').cpus().length;
 
