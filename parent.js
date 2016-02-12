@@ -49,7 +49,6 @@ function main(charset, strlength, salt)
     request({url: baseurl + '/GetHash', qs:propertiesObject}, function(err, response, body) {
         if(err) { console.log(err); return; }
         var hash = JSON.parse(body).hash;
-	
 	    console.time('score');
         timer.start(maxTime).on('end', function () {
             console.log('dropped');

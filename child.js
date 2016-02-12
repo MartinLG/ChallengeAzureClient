@@ -24,4 +24,3 @@ if (string == end) {
 } else {
 	process.send({status: 'found', string: string});
 }
-
