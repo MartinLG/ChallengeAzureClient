@@ -17,7 +17,7 @@ var b36 = baseN.create({
 
 var range = b36.decode(end) - b36.decode(string);
 
-console.log('range =>')
+console.log('range =>');
 console.log(range);
 
 for (var i = 0; i < range; i++) {
@@ -25,5 +25,8 @@ for (var i = 0; i < range; i++) {
 	var hash = sha1(string + salt);
 	redis.set(hash, string);
 }
+
+console.log('i =>');
+console.log(i);
 
 process.send({status: 'end'});

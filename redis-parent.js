@@ -34,14 +34,13 @@ main(charset, strlength, salt);
 function main()
 {
 	for (usedCores; usedCores < nbCores; usedCores++) {
-		console.log(currentWorker);
-		console.log(limits[currentWorker].end);
+		// console.log(currentWorker);
+		// console.log(limits[currentWorker].end);
 		var worker = childProcess.fork('redis-child.js', [limits[currentWorker].start, limits[currentWorker].end, charset, strlength, salt]);
 		currentWorker++;
 		worker.on('message', function(m) {
 			if (m.status === "end") {
 				worker.kill('SIGINT');
-				console.log('finished')
 				if (currentWorker < limits.length) {
 					usedCores--;
 					main();
