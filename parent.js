@@ -17,7 +17,6 @@ console.log("Parameters")
 console.log(charset)
 console.log(strlength)
 console.log(salt)
-
 console.log("Start")
 
 var b36 = baseN.create({

@@ -11,6 +11,7 @@
   "dependencies": {
     "base-n": "^1.0.0",
     "http": "0.0.0",
+    "redis": "^2.4.2",
     "request": "^2.69.0",
     "sha1": "^1.1.1",
     "timer.js": "^1.0.4"
