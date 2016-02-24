@@ -17,8 +17,8 @@ var max = b36.decode(charset[charset.length - 1].repeat(strlength));
 
 function resolveHashes() {
 	var x = Math.floor((Math.random() * (max + 1)));
-	var pass = b36.encode(start);
-	var hash = sha1(string + salt);
+	var pass = b36.encode(x);
+	var hash = sha1(pass + salt);
 	console.time('hash');
 
 	redis.get(hash, function(err, reply) {
@@ -34,3 +34,5 @@ function resolveHashes() {
         }
     });
 }
+
+resolveHashes();
