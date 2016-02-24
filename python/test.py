@@ -35,9 +35,11 @@ def setHashs(start, end):
 			key = '0'*(6-len(key)) + key
 		hash_object = hashlib.sha1(str.encode(key + '!$9'))
 		hex_dig = hash_object.hexdigest()
+		print key
+		print hex_dig
 		r.set(hex_dig, key)
 
 bythread = valmax / nbthread
 
-for t in xrange(0,7):
+for t in xrange(0,8):
  	thread.start_new_thread( setHashs, (t*bythread, (t+1)*bythread) )
