@@ -15,7 +15,7 @@ var b36 = baseN.create({
 
 var max = b36.decode(charset[charset.length - 1].repeat(strlength));
 
-resolveHashes() {
+function resolveHashes() {
 	var x = Math.floor((Math.random() * (max + 1)));
 	var pass = b36.encode(start);
 	var hash = sha1(string + salt);
