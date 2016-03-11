@@ -5,22 +5,33 @@ var client = _redis.createClient(6379, '167.114.227.190')
 
 var author = process.argv[2];
 var baseurl =  process.argv[3];
+var debug = process.argv[4] == 'true' ? true : false;
 
 function resolveHash() {
 	var propertiesObject = { author: author };
     request({url: baseurl + '/GetHash', qs:propertiesObject}, function(err, response, body) {
-    	if(err) { console.log(err); return; }
+    	if(err) { console.log(err); return resolveHash(); }
         
-        var hash = JSON.parse(body).hash;
+        var hash;
+
+        if (!debug) {
+        	hash = JSON.parse(body).hash;
+        } else {
+        	hash = JSON.parse(body).clean;
+        }
 
         console.time('score');
 
-        client.get(hash, function(err, reply) {
-            if (err) {console.log(err)}
-            if (reply) {
-                return sendResult(reply);
-            }
-        })
+        if (!debug) {
+	        client.get(hash, function(err, reply) {
+	            if (err) {console.log(err)}
+	            if (reply) {
+	                return sendResult(reply);
+	            }
+	        });
+        } else {
+        	return sendResult(hash);
+        }
     })
 }
 
