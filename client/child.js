@@ -7,6 +7,8 @@ var author = process.argv[2];
 var baseurl =  process.argv[3];
 var debug = process.argv[4] == 'true' ? true : false;
 
+resolveHash();
+
 function resolveHash() {
 	var propertiesObject = { author: author };
     request({url: baseurl + '/GetHash', qs:propertiesObject}, function(err, response, body) {
