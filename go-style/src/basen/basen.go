@@ -9,11 +9,15 @@ import (
 const (
     charset = "abcdefghijklmnopqrstuvwxyz"
     MAX_SAFE_INTEGER = 7378697
-    length = 6
+    length = 2
 )
 
+func Length() int {
+    return length
+}
+
 func Decode(id string) int {
-    if len(id) != 6 {
+    if len(id) != length {
         panic("length no repected")
     }
     num := 0
