@@ -9,7 +9,7 @@ import (
 const (
     charset = "abcdefghijklmnopqrstuvwxyz"
     MAX_SAFE_INTEGER = 7378697
-    length = 2
+    length = 4
 )
 
 func Length() int {
