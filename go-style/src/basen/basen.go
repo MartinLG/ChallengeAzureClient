@@ -3,12 +3,11 @@ package basen
 import (
     "strings"
     "math"
-    //"fmt"
 )
 
 const (
     charset = "abcdefghijklmnopqrstuvwxyz"
-    MAX_SAFE_INTEGER = 7378697
+    MAX_SAFE_INTEGER = 9007199254740991
     length = 4
 )
 

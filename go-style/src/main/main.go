@@ -39,7 +39,7 @@ func main() {
 
 func write(start string, end string, client *redis.Client, wg *sync.WaitGroup) {
     var length int
-    nbSetInRedis := basen.Decode(end) - basen.Decode(start) / 5
+    nbSetInRedis := (basen.Decode(end) - basen.Decode(start)) / 5
     if nbSetInRedis % 2 == 0 {
         length = nbSetInRedis
     } else {
